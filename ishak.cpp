@@ -25,6 +25,10 @@ inline void upd(int t, int x, int y, int h, int tfr, int xfr, int yfr, int hfr, 
 }
 
 void get_cost(Cost& cost, const Covered& covered) {
+    forn(t, T)
+        forn(x, grid.R)
+            forn(y, grid.C)
+                cost[t][x][y] = 0;
     forn(x, grid.R)
         forn(y, grid.C) {
             for (pii target : targets)
