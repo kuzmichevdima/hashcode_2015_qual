@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
                 printf("bad height %d for baloon %d after turn %d\n. Go fuck yourself", pos[bal].h, bal, turn); 
                 exit(1);
             }
-            if (in_range[bal]) {
+            if (in_range[bal] && pos[bal].h > 0) {
                 pii delta = grid.wind[pos[bal].h - 1][pos[bal].x][pos[bal].y];
                 pos[bal].x += delta.fi;
                 pos[bal].y = (pos[bal].y + delta.se + grid.C) % grid.C;
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         }
         for(pii target : targets) {
             bool covered = false;
-            forn(bal, B) if (in_range[bal]) {
+            forn(bal, B) if (in_range[bal] && pos[bal].h > 0) {
                 int deltay = abs(pos[bal].y - target.se);
                 int col_dist = min(deltay, grid.C - deltay);
                 int tmp = sqr(pos[bal].x - target.fi) + sqr(col_dist);
