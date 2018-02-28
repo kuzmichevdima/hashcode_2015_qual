@@ -2,7 +2,13 @@
 
 struct PosT {
     int t, x, y, h, score;
-    //PosT(int t, int x, int y, int h, int score) : t(t), x(x), y(y), h(h), score(score) {}
+	PosT() :
+		t(0),
+		x(0),
+		y(0),
+		h(0),
+		score(0) {}
+    PosT(int t, int x, int y, int h, int score) : t(t), x(x), y(y), h(h), score(score) {}
 };
 typedef vector<vector<vector<vector<PosT>> > > DP;
 typedef vector<vector<vi >> Cost;
