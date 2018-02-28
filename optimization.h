@@ -17,12 +17,7 @@ struct CSolutionWithScore {
 
 typedef vector<CSolutionWithScore> Population;
 
-const int MaxGenerationSize = 100;
-const int GrowingSize = 10;
-const int MaxSingleChanges = 3;
-const int NumberOfIterations = 100;
-
-void nextGeneration(Population& current)
+void nextGeneration(Population& current, const int MaxGenerationSize, const int GrowingSize, const int MaxSingleChanges )
 {
 	std::srand(std::time(nullptr));
 	for (int k = 0; k < current.size(); k++) {
@@ -45,14 +40,14 @@ void nextGeneration(Population& current)
 	}
 }
 
-Solution impove(const Solution& solution)
+Solution impove(const Solution& solution, const int NumberOfIterations = 100, const int MaxGenerationSize = 100, const int GrowingSize = 10, const int MaxSingleChanges = 3 )
 {
 	Population population;
 	int score = calc_score(solution);
 	population.push_back({ solution, score });
 	for (int i = 0; i < NumberOfIterations; i++) {
 		printf("Gen %d Best %d\n", i, population[0].Score);
-		nextGeneration(population);
+		nextGeneration(population, MaxGenerationSize, GrowingSize, MaxSingleChanges);
 	}
 	return population[0].Solution;
 }
