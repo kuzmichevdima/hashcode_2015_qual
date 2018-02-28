@@ -29,6 +29,8 @@ using namespace std;
 #define forn(i, n) for (int i = 0; i < (int)n; i++)
 #define fore(i, b, e) for (int i = (int)b; i <= (int)e; i++)
 
+typedef vector<vector<char>> Solution;
+
 struct Grid {
     int R, C, A;
     vector<vector<vector<pii>>> wind;
@@ -71,4 +73,51 @@ void read_input() {
                 cin >> grid.wind[i][j][k].fi >> grid.wind[i][j][k].se;
         }
     }
+}
+
+int sqr(int x) {
+    return x * x;
+}
+
+int calc_score(const Solution& sol) {
+    vector<Position> pos(B);
+    forn(i, B) {
+        pos[i].x = start_cell.fi;
+        pos[i].y = start_cell.se;
+    }
+    int score = 0;
+    vector<bool> in_range(B, true);
+    forn(turn, T) {
+        forn(bal, B) {
+            int delta_h = sol[turn][bal];
+            pos[bal].h += delta_h;
+            //printf("turn = %d bal = %d delta_h = %d h = %d \n", turn, bal, delta_h, pos[bal].h);
+            if (pos[bal].h < 0 || pos[bal].h > grid.A || (pos[bal].h == 0 && delta_h == -1)) {
+                printf("bad height %d for baloon %d after turn %d\n. Go fuck yourself", pos[bal].h, bal, turn); 
+                exit(1);
+            }
+            if (in_range[bal] && pos[bal].h > 0) {
+                pii delta = grid.wind[pos[bal].h - 1][pos[bal].x][pos[bal].y];
+                pos[bal].x += delta.fi;
+                pos[bal].y = (pos[bal].y + delta.se + grid.C) % grid.C;
+                if (pos[bal].x < 0 || pos[bal].x >= grid.R)
+                    in_range[bal] = false;
+            }
+        }
+        for(pii target : targets) {
+            bool covered = false;
+            forn(bal, B) if (in_range[bal] && pos[bal].h > 0) {
+                int deltay = abs(pos[bal].y - target.se);
+                int col_dist = min(deltay, grid.C - deltay);
+                int tmp = sqr(pos[bal].x - target.fi) + sqr(col_dist);
+                if (tmp <= V * V) {
+                    covered = true;
+                    break;
+                }
+            }
+            if (covered)
+                score++;
+        }
+    }
+    return score;
 }
