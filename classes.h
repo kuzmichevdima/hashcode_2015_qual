@@ -42,11 +42,20 @@ struct Position {
     int x, y, h;
     Position move_ballon(int h_delta = 0) {
         Position res = *this;
+        assert(!(h == 0 && h_delta == -1));
         res.h += h_delta;
         assert(res.h <= grid.A);
-        const pii& w = grid.wind[h][x][y];
+        const pii& w = (res.h == 0? pii(0, 0) : grid.wind[res.h - 1][x][y]);
         res.x += w.first;
         res.y += w.second;
+        if (res.y < 0) {
+            res.y += grid.C;
+        } else if (res.y >= grid.C) {
+            res.y -= grid.C;
+        }
+        if (!(res.x >= 0 && res.x < grid.R)) {
+            res.h = -1; // hack
+        }
         return res;
     }
 };
