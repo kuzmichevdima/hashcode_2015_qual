@@ -96,7 +96,7 @@ vector<char> AddBaloon(const Solution& sol) {
                 if (pos[bal].x < 0 || pos[bal].x >= grid.R)
                     in_range[bal] = false;
                 else {
-                    update_covered(covered, {turn, pos[bal].x, pos[bal].y, pos[bal].h, 0}, neighbors);
+                    update_covered(covered, {turn + 1, pos[bal].x, pos[bal].y, pos[bal].h, 0}, neighbors);
                 }
             }
         }
