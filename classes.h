@@ -1,3 +1,4 @@
+#pragma once
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
@@ -33,11 +34,27 @@ struct Grid {
     vector<vector<vector<pii>>> wind;
 };
 
+Grid grid;
+
 struct Position {
     int x, y, h;
+    Position move_ballon(int h_delta = 0) {
+        Position res = *this;
+        res.h += h_delta;
+        assert(res.h <= grid.A);
+        const pii& w = grid.wind[h][x][y];
+        res.x += w.first;
+        res.y += w.second;
+        return res;
+    }
 };
 
-void read_input(Grid& grid, int& V, int& B, int&T, pii& start_cell, vector<pii>& targets) {
+pii start_cell;
+vector<pii> targets;
+int V, B, T; // V - coverage radius, B - number of balloons, T - turns
+
+
+void read_input() {
     cin >> grid.R >> grid.C >> grid.A;
     int targets_cnt;
     cin >> targets_cnt >> V >> B >> T >> start_cell.fi >> start_cell.se;
