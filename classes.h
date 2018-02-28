@@ -30,7 +30,11 @@ using namespace std;
 
 struct Grid {
     int R, C, A;
-    vector<vector<vi>> wind;
+    vector<vector<vector<pii>>> wind;
+};
+
+struct Position {
+    int x, y, h;
 };
 
 void read_input(Grid& grid, int& V, int& B, int&T, pii& start_cell, vector<pii>& targets) {
@@ -47,7 +51,7 @@ void read_input(Grid& grid, int& V, int& B, int&T, pii& start_cell, vector<pii>&
         forn(j, grid.R) {
             grid.wind[i][j].resize(grid.C);
             forn(k, grid.C)
-                cin >> grid.wind[i][j][k];
+                cin >> grid.wind[i][j][k].fi >> grid.wind[i][j][k].se;
         }
     }
 }
