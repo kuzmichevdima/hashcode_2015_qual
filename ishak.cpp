@@ -25,7 +25,7 @@ inline void upd(int t, int x, int y, int h, int tfr, int xfr, int yfr, int hfr, 
 }
 
 void get_cost(Cost& cost, const Covered& covered) {
-    forn(t, T)
+    forn(t, T + 1)
         forn(x, grid.R)
             forn(y, grid.C)
                 cost[t][x][y] = 0;
@@ -33,7 +33,7 @@ void get_cost(Cost& cost, const Covered& covered) {
         forn(y, grid.C) {
             for (pii target : targets)
                 if (covers({x, y}, target))
-                    forn(t, T)
+                    forn(t, T + 1)
                         cost[t][x][y] += !covered[t][target.fi][target.se];
         }
 }
@@ -64,9 +64,9 @@ vector<char> AddBaloon(const Solution& sol) {
                     }
         }
     }
-    Covered covered(T);
-    Cost cost(T);
-    forn(t, T) {
+    Covered covered(T + 1);
+    Cost cost(T + 1);
+    forn(t, T + 1) {
         covered[t].resize(grid.R);
         cost[t].resize(grid.R);
         forn(x, grid.R) {
@@ -96,13 +96,13 @@ vector<char> AddBaloon(const Solution& sol) {
                 if (pos[bal].x < 0 || pos[bal].x >= grid.R)
                     in_range[bal] = false;
                 else {
-                    update_covered(covered, {turn, pos[bal].x, pos[bal].y, pos[bal].h, 0}, neighbors);
+                    update_covered(covered, {turn + 1, pos[bal].x, pos[bal].y, pos[bal].h, 0}, neighbors);
                 }
             }
         }
     }
-    DP dp(T);
-    forn(t, T) {
+    DP dp(T + 1);
+    forn(t, T + 1) {
         dp[t].resize(grid.R);
         forn(x, grid.R) {
             dp[t][x].resize(grid.C);
@@ -112,7 +112,7 @@ vector<char> AddBaloon(const Solution& sol) {
         }
     }
 
-    forn(t, T)
+    forn(t, T + 1)
         forn(x, grid.R)
             forn(y, grid.C)
                 forn(h, grid.A + 1)
@@ -120,7 +120,7 @@ vector<char> AddBaloon(const Solution& sol) {
     dp[0][start_cell.fi][start_cell.se][0] = {0, 0, 0, 0, 1};
     PosT best_pos;
     get_cost(cost, covered);
-    forn(t, T) {
+    forn(t, T + 1) {
         forn(x, grid.R)
             forn(y, grid.C)
                 forn(h, grid.A + 1)
@@ -128,7 +128,7 @@ vector<char> AddBaloon(const Solution& sol) {
                         if (dp[t][x][y][h].score > best_pos.score) {
                             best_pos = {t, x, y, h, dp[t][x][y][h].score};
                         }
-                        if (t == T - 1)
+                        if (t == T)
                             continue;
                         fore(deltah, -1, 1) {
                             int newh = h + deltah;
@@ -175,9 +175,9 @@ int main() {
                     }
         }
     }
-    Covered covered(T);
-    Cost cost(T);
-    forn(t, T) {
+    Covered covered(T + 1);
+    Cost cost(T + 1);
+    forn(t, T + 1) {
         covered[t].resize(grid.R);
         cost[t].resize(grid.R);
         forn(x, grid.R) {
@@ -185,8 +185,8 @@ int main() {
             cost[t][x].resize(grid.C);
         }
     }
-    DP dp(T);
-    forn(t, T) {
+    DP dp(T + 1);
+    forn(t, T + 1) {
         dp[t].resize(grid.R);
         forn(x, grid.R) {
             dp[t][x].resize(grid.C);
@@ -198,7 +198,7 @@ int main() {
 
     forn(b, B) {
         fprintf(stderr, "b = %d", b);
-        forn(t, T)
+        forn(t, T + 1)
             forn(x, grid.R)
                 forn(y, grid.C)
                     forn(h, grid.A + 1)
@@ -211,7 +211,7 @@ int main() {
                 forn(y, grid.C)
                     printf("cost[%d][%d][%d] = %d\n", t, x, y, cost[t][x][y]);*/
         printf("b = %d\n", b);
-        forn(t, T) {
+        forn(t, T + 1) {
             forn(x, grid.R)
                 forn(y, grid.C)
                     forn(h, grid.A + 1)
@@ -220,7 +220,7 @@ int main() {
                                 best_pos = {t, x, y, h, dp[t][x][y][h].score};
                             }
                             //printf("t = %d x = %d y = %d h = %d\n", t, x, y, h);
-                            if (t == T - 1)
+                            if (t == T)
                                 continue;
                             fore(deltah, -1, 1) {
                                 int newh = h + deltah;
