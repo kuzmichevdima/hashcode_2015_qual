@@ -86,7 +86,7 @@ void readPopulation(Population& population, char* filename = "gen.pop")
 	infile.close();
 }
 
-Solution impove(const Solution& solution, const int NumberOfIterations = 100, const int MaxGenerationSize = 100, const int GrowingSize = 10, const int MaxSingleChanges = 3 )
+Solution improve(const Solution& solution, const int NumberOfIterations = 100, const int MaxGenerationSize = 100, const int GrowingSize = 10, const int MaxSingleChanges = 3 )
 {
 	Population population;
 	int score = calc_score(solution);
