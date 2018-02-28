@@ -55,12 +55,6 @@ vector<pii> get_coverage(const pii& pos) {
 
 vector<vector<vector<int>>> get_cost(const vector<vector<char>>& balloons) {
     vector<vector<vector<int>>> res(T, vector<vector<int>>(grid.R, vector<int>(grid.C)));
-    vector<vector<int>> init_res(vector<vector<int>>(grid.R, vector<int>(grid.C)));
-    for (auto& t : targets) {
-        for (auto & pos : get_coverage(t)) {
-            ++init_res[pos.fi][pos.se];
-        }
-    }
 
     Position start_position;
     start_position.x = start_cell.first;
@@ -68,21 +62,20 @@ vector<vector<vector<int>>> get_cost(const vector<vector<char>>& balloons) {
     start_position.h = 0;
     vector<Position> ballons_pos(balloons.size(), start_position);
     for (int t = 0; t < T; ++t) {
-        for (int x = 0; x < grid.R; x++) {
-            for (int y = 0; y < grid.C; y++) {
-                if (t == 0) {
-                    res[t][x][y] = init_res[x][y];
-                } else {
-                    res[t][x][y] = res[t - 1][x][y];
-                }
-
-            }
-        }
+        vector<vector<bool>> covered(grid.R, vector<bool>(grid.C));
         forn (i, balloons.size()) {
             ballons_pos[i] = ballons_pos[i].move_ballon(balloons[i][t]);
             if (ballons_pos[i].h != 0) {
                 for (auto &pos : get_coverage({ballons_pos[i].x, ballons_pos[i].y})) {
-                    res[t][pos.fi][pos.se] = 0;
+                    covered[pos.fi][pos.se] = true;
+                }
+            }
+        }
+
+        for (auto& tar : targets) {
+            if (!covered[tar.fi][tar.se]) {
+                for (auto &pos : get_coverage(tar)) {
+                    ++res[t][pos.fi][pos.se];
                 }
             }
         }
@@ -168,6 +161,8 @@ int main() {
         sum += max_cost;
         cerr << "Score: " << max_cost << " " << "Sum: " << sum << endl;
     }
+
+    cerr << "Dima score: " << calc_score(transpose(sol)) << endl;
 
 
     return 0;
