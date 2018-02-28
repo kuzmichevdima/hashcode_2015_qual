@@ -79,6 +79,12 @@ int sqr(int x) {
     return x * x;
 }
 
+bool covers(pii fr, pii target) {
+    int deltay = abs(fr.se - target.se);
+    int col_dist = min(deltay, grid.C - deltay);
+    return sqr(fr.fi - target.fi) + sqr(col_dist) <= V * V;
+}
+
 int calc_score(const Solution& sol) {
     vector<Position> pos(B);
     forn(i, B) {
